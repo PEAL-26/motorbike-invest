@@ -1,12 +1,11 @@
 import { Tabs } from "expo-router";
 import React from "react";
-import { Platform } from "react-native";
 
-import { HapticTab } from "@/components/haptic-tab";
 import { IconSymbol } from "@/components/ui/icon-symbol";
-import TabBarBackground from "@/components/ui/tab-bar-background";
+import { TabBar } from "@/components/ui/tab-bar";
 import { colors } from "@/constants/colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
+import { Platform } from "react-native";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -16,23 +15,22 @@ export default function TabLayout() {
       screenOptions={{
         tabBarActiveTintColor: colors[colorScheme ?? "light"].tint,
         headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
+        // tabBarButton: HapticTab,
         tabBarStyle: Platform.select({
           ios: {
-            // Use a transparent background on iOS to show the blur effect
             position: "absolute",
           },
           default: {},
         }),
       }}
+      tabBar={({ ...rest }) => <TabBar {...rest} />}
     >
       <Tabs.Screen
         name="index"
         options={{
           title: "Rendimentos",
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="house.fill" color={color} />
+            <IconSymbol size={28} name="money" color={color} />
           ),
         }}
       />
@@ -41,7 +39,7 @@ export default function TabLayout() {
         options={{
           title: "Investimentos",
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="paperplane.fill" color={color} />
+            <IconSymbol size={28} name="trending" color={color} />
           ),
         }}
       />
@@ -50,7 +48,7 @@ export default function TabLayout() {
         options={{
           title: "Simulador",
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="paperplane.fill" color={color} />
+            <IconSymbol size={28} name="savings" color={color} />
           ),
         }}
       />
