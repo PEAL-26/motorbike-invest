@@ -1,5 +1,4 @@
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
-import { PlatformPressable } from "@react-navigation/elements";
 import * as Haptics from "expo-haptics";
 import { TouchableOpacity, View } from "react-native";
 
@@ -15,7 +14,7 @@ export function TabBar(props: TabBarProps) {
   return (
     <View
       className={cn(
-        "absolute inset-x-0 flex-row items-center justify-between border-b border-gray-300 bg-white px-8  transition-all py-5 bottom-0 rounded-t-[40px]",
+        "absolute inset-x-0 flex-row items-center justify-between border-b border-gray-300 bg-white px-8  transition-all bottom-0 rounded-t-[40px] h-[76px]",
       )}
     >
       {state.routes.map((route, index) => {

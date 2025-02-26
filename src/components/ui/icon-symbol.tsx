@@ -8,9 +8,9 @@ const MAPPING = {
   "paperplane.fill": "send",
   "chevron.left.forwardslash.chevron.right": "code",
   "chevron.right": "chevron-right",
-  "money": "attach-money",
-  "trending": "trending-up",
-  "savings": "savings",
+  "attach-money": "attach-money",
+  "trending-up": "trending-up",
+  savings: "savings",
 } as Partial<
   Record<
     import("expo-symbols").SymbolViewProps["name"],

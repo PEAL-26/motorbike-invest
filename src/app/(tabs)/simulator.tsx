@@ -1,9 +1,9 @@
-import { simulate, SimulatorForm } from "@/components/simulator-form";
-import { SimulatorFormData } from "@/components/simulator-form/types";
+import { simulate, SimulatorForm } from "@/components/elements/simulator-form";
+import { SimulatorFormData } from "@/components/elements/simulator-form/types";
 import {
   SimulatorItem,
   SimulatorItemCard,
-} from "@/components/simulator-item-card";
+} from "@/components/elements/simulator-item-card";
 import { colors } from "@/constants/colors";
 import { useState } from "react";
 import { ActivityIndicator, ScrollView, Text, View } from "react-native";
@@ -25,7 +25,7 @@ export default function SimulatorScreen() {
         <Text className="text-white font-bold mt-14 text-2xl">Simulador</Text>
         <View className="absolute bottom-0 inset-x-5 translate-y-1/2 flex justify-center items-center z-10">
           <View className="bg-green-700 rounded-lg w-full p-4 ">
-            <SimulatorForm onSimulate={handleSimulate} />
+           
           </View>
         </View>
       </View>
