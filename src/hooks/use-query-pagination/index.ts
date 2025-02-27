@@ -1,2 +1,2 @@
-export * from './types';
-export * from './use-query-pagination';
+export * from "./types";
+export * from "./use-query-pagination";

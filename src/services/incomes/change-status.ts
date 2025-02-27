@@ -8,7 +8,11 @@ export type IncomeChangeStatusInput = {
 };
 
 export async function incomeChangeStatus(input: IncomeChangeStatusInput) {
-  const { id, paymentDate: payment_date, status = INCOME_STATUS_ENUM.PENDING } = input;
+  const {
+    id,
+    paymentDate: payment_date,
+    status = INCOME_STATUS_ENUM.PENDING,
+  } = input;
   if (!id) throw new Error("Id obrigatório.");
   if (status === INCOME_STATUS_ENUM.PAID) {
     if (!payment_date) throw new Error("Data de pagamento obrigatória.");

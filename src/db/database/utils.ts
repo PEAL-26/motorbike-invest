@@ -262,7 +262,7 @@ export function generateCreateFields(data: Record<string, any>) {
     // }
 
     // values.push(`"${value}"`);
-    
+
     values.push(setValueData(value));
   }
 

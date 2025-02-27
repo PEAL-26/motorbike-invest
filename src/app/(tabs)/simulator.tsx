@@ -24,7 +24,7 @@ export default function SimulatorScreen() {
   const handleSimulate = (data: SimulatorFormData) => {
     setIsLoading(true);
     const result = simulate(data);
-    console.log(result)
+    console.log(result);
     setIsLoading(false);
     //setItems(result);
   };

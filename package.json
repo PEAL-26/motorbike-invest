@@ -12,7 +12,9 @@
     "lint": "expo lint",
     "drizzle:generate": "npx drizzle-kit generate",
     "drizzle:migrate": "npx drizzle-kit migrate",
-    "drizzle:studio": "npx drizzle-kit studio --verbose"
+    "drizzle:studio": "npx drizzle-kit studio --verbose",
+    "eas:build:dev:android": "eas build --profile development --platform android",
+    "eas:build:preview:android": "eas build --profile preview --platform android"
   },
   "jest": {
     "preset": "jest-expo"

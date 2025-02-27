@@ -1,11 +1,11 @@
+import { PaginatedResult } from "@/db/database";
 import {
   InfiniteData,
   keepPreviousData,
   useInfiniteQuery as useInfiniteQueryRQ,
 } from "@tanstack/react-query";
-import { QueryFnContext, QueryPaginationProps } from "./types";
-import { PaginatedResult } from "@/db/database";
 import { useMemo } from "react";
+import { QueryFnContext, QueryPaginationProps } from "./types";
 
 export function useQueryPagination<T>(props: QueryPaginationProps<T>) {
   const { queryKey, fn, ...restProps } = props;
@@ -15,7 +15,7 @@ export function useQueryPagination<T>(props: QueryPaginationProps<T>) {
   };
 
   const select = (
-    data?: InfiniteData<PaginatedResult<T> | undefined, number>
+    data?: InfiniteData<PaginatedResult<T> | undefined, number>,
   ) => {
     if (!data) return undefined;
 
