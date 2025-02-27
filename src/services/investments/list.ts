@@ -41,12 +41,12 @@ export async function listInvestments(
     page,
     size,
     where: {
-      //   name: {
-      //     op: "like",
-      //     value: query,
-      //   },
+      name: {
+        op: "like",
+        value: query,
+      },
       status: params?.status,
     },
-    // orderBy: [{ created_at: "desc" }],
+    orderBy: [{ start_date: "asc" }],
   });
 }

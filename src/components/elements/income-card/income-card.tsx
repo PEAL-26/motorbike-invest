@@ -1,5 +1,6 @@
-import { INCOME_STATUS_ENUM } from "@/constants/income";
+import { clearDate } from "@/helpers/date";
 import { moneyFormat } from "@/helpers/money";
+import { verifyIncomeStatus } from "@/helpers/payment-status";
 import { cn } from "@/lib/utils";
 import { Text, TouchableOpacity, View } from "react-native";
 import { IncomeCardStatus } from "./status";
@@ -7,26 +8,7 @@ import { IncomeCardProps } from "./types";
 
 export function IncomeCard(props: IncomeCardProps) {
   const { data, onPress } = props;
-
-  const verifyStatus = () => {
-    const date = new Date().getTime();
-
-    if (
-      data.status === INCOME_STATUS_ENUM.PENDING &&
-      !data.paymentDate &&
-      date > new Date(data.incomeDate).getTime()
-    ) {
-      return "LATE";
-    }
-
-    if (data.status === INCOME_STATUS_ENUM.PAID) {
-      return "PAID";
-    }
-
-    return "PENDING";
-  };
-
-  const status = verifyStatus();
+  const { status, daysLate } = verifyIncomeStatus(data);
 
   return (
     <TouchableOpacity onPress={onPress} activeOpacity={0.7}>
@@ -43,9 +25,9 @@ export function IncomeCard(props: IncomeCardProps) {
               status === "LATE" && "text-white",
             )}
           >
-            {moneyFormat(data.income)}
+            {moneyFormat(data.income)} Kz
           </Text>
-          <IncomeCardStatus status={status} incomeDate={data.incomeDate} />
+          <IncomeCardStatus status={status} daysLate={daysLate} />
         </View>
         <View className="flex flex-row items-start justify-between">
           <Text
@@ -53,14 +35,14 @@ export function IncomeCard(props: IncomeCardProps) {
               "text-xs text-gray-500",
               status === "LATE" && "text-white",
             )}
-          >{`${data.number} | ${data.code}`}</Text>
+          >{`${data?.number}º | ${data.investment.name} (${data.investment.id})`}</Text>
           <Text
             className={cn(
               "text-xs text-gray-500",
               status === "LATE" && "text-white",
             )}
           >
-            {data.incomeDate.toDateString()}
+            {clearDate(data.incomeDate).toDateString()}
           </Text>
         </View>
       </View>

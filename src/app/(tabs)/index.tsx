@@ -1,6 +1,6 @@
 import { IncomeCard } from "@/components/elements/income-card";
 import { StatusBarFilter } from "@/components/elements/status-bar-filter";
-import { IncomeModal } from "@/components/madals";
+import { IncomeModal } from "@/components/modals";
 import { Loading } from "@/components/ui/loading";
 import { useLoadingScreen } from "@/hooks/use-loading-screen";
 import { useQueryPagination } from "@/hooks/use-query-pagination";
@@ -34,7 +34,7 @@ export default function IncomeScreen() {
   });
 
   const { data } = useQueryPagination({
-    fn: () => listIncomes(),
+    fn: () => listIncomes({ size: 50 }),
     queryKey: ["incomes"],
   });
 
@@ -123,11 +123,13 @@ export default function IncomeScreen() {
           </>
         )}
       </View>
-      <IncomeModal
-        show={incomeModal.show}
-        incomeId={incomeModal?.id}
-        onClose={() => setIncomeModal({ show: false })}
-      />
+      {incomeModal.show && (
+        <IncomeModal
+          show={incomeModal.show}
+          incomeId={incomeModal?.id}
+          onClose={() => setIncomeModal({ show: false })}
+        />
+      )}
     </>
   );
 }

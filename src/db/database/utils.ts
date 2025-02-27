@@ -215,6 +215,22 @@ export function generateOrderByClause(
 
 const NOT_STRING_TYPES = ["boolean", "number"];
 
+export function setValueData(value: any) {
+  if (value === null) {
+    return null;
+  }
+
+  if (value instanceof Date) {
+    return value.toISOString();
+  }
+
+  if (typeof value === "object") {
+    return JSON.stringify(value);
+  }
+
+  return value;
+}
+
 export function generateCreateFields(data: Record<string, any>) {
   let fields: string[] = [];
   let values: any[] = [];
@@ -225,20 +241,20 @@ export function generateCreateFields(data: Record<string, any>) {
 
     fields.push(field);
 
-    if (value === null) {
-      values.push(null);
-      continue;
-    }
+    // if (value === null) {
+    //   values.push(null);
+    //   continue;
+    // }
 
-    if (value instanceof Date) {
-      values.push(value.toISOString());
-      continue;
-    }
+    // if (value instanceof Date) {
+    //   values.push(value.toISOString());
+    //   continue;
+    // }
 
-    if (typeof value === "object") {
-      values.push(JSON.stringify(value));
-      continue;
-    }
+    // if (typeof value === "object") {
+    //   values.push(JSON.stringify(value));
+    //   continue;
+    // }
 
     // if (typeof value !== "object" && NOT_STRING_TYPES.includes(typeof value)) {
     //   values.push(value);
@@ -246,7 +262,8 @@ export function generateCreateFields(data: Record<string, any>) {
     // }
 
     // values.push(`"${value}"`);
-    values.push(value);
+    
+    values.push(setValueData(value));
   }
 
   return { fields, values };

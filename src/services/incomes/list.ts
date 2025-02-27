@@ -10,13 +10,17 @@ export type ListIncomeResponseData = {
   incomeDate: Date;
   paymentDate?: Date | null;
   status: INCOME_STATUS_ENUM;
+  investment: {
+    id: number;
+    name: string;
+  };
 };
 
 export type ListIncomesParams = {
   query?: string;
   size?: number;
   page?: number;
-  status: INCOME_STATUS_ENUM
+  status?: INCOME_STATUS_ENUM;
 };
 
 export async function listIncomes(
@@ -26,6 +30,7 @@ export async function listIncomes(
   return db.listPaginate<ListIncomeResponseData>("incomes", {
     select: {
       id: true,
+      number: true,
       code: true,
       income: true,
       income_date: {
@@ -36,15 +41,25 @@ export async function listIncomes(
       },
       status: true,
     },
+    include: {
+      investments: {
+        as: "investment",
+        singular: "investment",
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+    },
     page,
     size,
     where: {
-    //   name: {
-    //     op: "like",
-    //     value: query,
-    //   },
-      status: params?.status
+      code: {
+        op: "like",
+        value: query,
+      },
+      status: params?.status,
     },
-    // orderBy: [{ created_at: "desc" }],
+    orderBy: [{ income_date: "asc" }],
   });
 }

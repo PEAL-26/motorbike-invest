@@ -1,5 +1,5 @@
 export type SimulatorFormData = {
-  date: Date;
+  date: string;
   balanceInitial: number;
   investment: number;
   income: number;

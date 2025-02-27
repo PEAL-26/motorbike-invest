@@ -1,5 +1,6 @@
 import { INVESTMENT_STATUS_ENUM } from "@/constants/investment";
 import { db } from "@/lib/drizzle";
+import { generateIncomes } from "./generate-incomes";
 
 export type RegisterInvestmentInput = {
   id?: number;
@@ -25,6 +26,7 @@ export async function registerInvestment(input: RegisterInvestmentInput) {
     duration,
     startDate: start_date,
     endDate: end_date,
+    status = INVESTMENT_STATUS_ENUM.PENDING,
   } = input;
   if (!name?.trim()) throw new Error("Nome obrigatório.");
   if (!amount) throw new Error("Valor do investimento obrigatório.");
@@ -33,6 +35,7 @@ export async function registerInvestment(input: RegisterInvestmentInput) {
   if (!duration) throw new Error("Duração obrigatória.");
   if (!start_date) throw new Error("Data de início obrigatória.");
   if (!end_date) throw new Error("Data de término obrigatória.");
+
   const payload = {
     name,
     amount,
@@ -42,15 +45,40 @@ export async function registerInvestment(input: RegisterInvestmentInput) {
     duration,
     start_date,
     end_date,
+    status,
   };
 
+  let investment = null;
   if (id) {
-    await db.update("investments", payload, id);
+    investment = await db.getFirst("investments", {
+      where: {
+        id,
+      },
+    });
+
+    if (!investment) {
+      throw new Error("Investimento não encontrado.");
+    }
+
+    await db.update<any>("investments", payload, id);
   } else {
-    await db.insert("investments", payload);
+    investment = await db.insert<any>("investments", payload);
   }
 
-  // await db.transaction(async () => {
+  if (status === INVESTMENT_STATUS_ENUM.ACTIVE) {
+    const incomes = generateIncomes({
+      date: start_date,
+      duration,
+      income,
+      investmentId: investment?.id,
+      bonus,
+    });
 
-  // });
+    await db.delete("incomes", { investment_id: investment.id });
+    await db.insertBulk("incomes", incomes);
+    // if (id) {
+    //   // Atualizar
+    // } else {
+    // }
+  }
 }

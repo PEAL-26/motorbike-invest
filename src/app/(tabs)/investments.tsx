@@ -1,6 +1,6 @@
 import { InvestmentCard } from "@/components/elements/investment-card";
 import { StatusBarFilter } from "@/components/elements/status-bar-filter";
-import { InvestmentModal } from "@/components/madals";
+import { InvestmentModal } from "@/components/modals";
 import { INVESTMENT_STATUS_ENUM } from "@/constants/investment";
 import { useQueryPagination } from "@/hooks/use-query-pagination";
 import { getInvestmentSummary, listInvestments } from "@/services/investments";
@@ -48,8 +48,6 @@ export default function InvestmentsScreen() {
     setStatus(status);
   };
 
-  console.log(data);
-
   return (
     <>
       <View className="flex-1">
@@ -95,7 +93,7 @@ export default function InvestmentsScreen() {
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
         >
-          <View className="pt-4 px-5 pb-[88px] flex flex-col gap-3">
+          <View className="pt-4 px-5 pb-[144px] flex flex-col gap-3">
             <FlatList
               showsHorizontalScrollIndicator={false}
               showsVerticalScrollIndicator={false}
@@ -123,7 +121,10 @@ export default function InvestmentsScreen() {
       </TouchableOpacity>
 
       {investmentModal?.show && (
-        <InvestmentModal onClose={() => setInvestmentModal({ show: false })} />
+        <InvestmentModal
+          investmentId={investmentModal.id}
+          onClose={() => setInvestmentModal({ show: false })}
+        />
       )}
     </>
   );

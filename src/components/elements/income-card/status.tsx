@@ -1,14 +1,12 @@
 import {} from "@expo/vector-icons";
 import { Text, View } from "react-native";
 interface Props {
-  incomeDate: Date;
   status: "PENDING" | "LATE" | "PAID";
+  daysLate: number | null;
 }
 
 export function IncomeCardStatus(props: Props) {
-  const { status, incomeDate } = props;
-  // Verificar quantos dias está atrasado
-  const daysLate = 1;
+  const { status, daysLate } = props;
   return (
     <View className="">
       {status === "PENDING" && (

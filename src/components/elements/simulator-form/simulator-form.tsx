@@ -1,30 +1,44 @@
+import { isValidDate } from "@/helpers/date";
+import { useState } from "react";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
-import { DateInput } from "../../ui/date-input";
 import { SimulatorFormProps } from "./types";
 import { useSimulatorForm } from "./use-simulator-form";
 
 export function SimulatorForm(props: SimulatorFormProps) {
   const { handleSimulate, formData, handleFormData } = useSimulatorForm(props);
 
+  const [errorDate, setErrorDate] = useState(false);
+
   return (
-    <View className="flex flex-col gap-4">
+    <View className="flex flex-col gap-4 px-5 pb-5">
       <View className="flex flex-col gap-3 ">
         {/* Investimento */}
-        <DateInput />
-        {/* <TextInput
-          className="text-white border border-white rounded px-2 py-1"
-          placeholderClassName="text-white/50"
-          placeholder="Data ()"
-          value={formData?.date?.toString()}
-          onChangeText={(date) => handleFormData({ date })}
-          returnKeyType="next"
-        /> */}
+        <View className="flex-1">
+          <Text className="font-bold">Data de início</Text>
+          <TextInput
+            keyboardType="numbers-and-punctuation"
+            placeholder={new Date().toLocaleDateString()}
+            className="border rounded px-2 text-xs border-gray-200"
+            maxLength={11}
+            value={formData?.date}
+            onChangeText={(date) => handleFormData({ date })}
+            onBlur={() => {
+              setErrorDate(false);
+              if (!isValidDate(formData?.date || "")) {
+                setErrorDate(true);
+              }
+            }}
+          />
+          {errorDate && (
+            <Text className="text-xs text-red-500">Formato: dd/mm/yyyy</Text>
+          )}
+        </View>
 
         {/* Investimento */}
+        <Text className="font-bold">Valor Inicial</Text>
         <TextInput
-          className="text-white border border-white rounded px-2 py-1"
+          className="border rounded px-2 text-xs border-gray-200"
           placeholderClassName="text-white/50"
-          placeholderTextColor={"#ffffff50"}
           placeholder="Valor disponível"
           value={formData?.balanceInitial?.toString()}
           onChangeText={(balanceInitial) => handleFormData({ balanceInitial })}
@@ -33,8 +47,9 @@ export function SimulatorForm(props: SimulatorFormProps) {
         />
 
         {/* Investimento */}
+        <Text className="font-bold">Valor do Investimento</Text>
         <TextInput
-          className="text-white border border-white rounded px-2 py-1"
+          className="border rounded px-2 text-xs border-gray-200"
           placeholderClassName="text-white/50"
           placeholder="Investimento"
           value={formData?.investment?.toString()}
@@ -44,8 +59,9 @@ export function SimulatorForm(props: SimulatorFormProps) {
         />
 
         {/* Rendimento Mensal */}
+        <Text className="font-bold">Rendimento mensal</Text>
         <TextInput
-          className="text-white border border-white rounded px-2 py-1"
+          className="border rounded px-2 text-xs border-gray-200"
           placeholderClassName="text-white/50"
           placeholder="Rendimento mensal"
           value={formData?.income?.toString()}
@@ -55,8 +71,9 @@ export function SimulatorForm(props: SimulatorFormProps) {
         />
 
         {/* Intervalo de tempo (mês) para iniciar a receber os rendimentos */}
+        <Text className="font-bold">Intervalo até o primeiro rendimento</Text>
         <TextInput
-          className="text-white border border-white rounded px-2 py-1"
+          className="border rounded px-2 text-xs border-gray-200"
           placeholderClassName="text-white/50"
           placeholder="Início do rendimento"
           value={formData?.intervalPeriodBeforeInvestment?.toString()}
@@ -68,8 +85,9 @@ export function SimulatorForm(props: SimulatorFormProps) {
         />
 
         {/* Duração (em meses) */}
+        <Text className="font-bold">Duração</Text>
         <TextInput
-          className="text-white border border-white rounded px-2 py-1"
+          className="border rounded px-2 text-xs border-gray-200"
           placeholderClassName="text-white/50"
           placeholder="Duração (em meses)"
           value={formData?.duration?.toString()}
@@ -79,8 +97,9 @@ export function SimulatorForm(props: SimulatorFormProps) {
         />
 
         {/* Objectivo */}
+        <Text className="font-bold">Objectivo</Text>
         <TextInput
-          className="text-white border border-white rounded px-2 py-1"
+          className="border rounded px-2 text-xs border-gray-200"
           placeholderClassName="text-white/50"
           placeholder="Objectivo"
           value={formData?.goal?.toString()}
@@ -91,8 +110,8 @@ export function SimulatorForm(props: SimulatorFormProps) {
       </View>
 
       <TouchableOpacity activeOpacity={0.6} onPress={handleSimulate}>
-        <View className="rounded-full w-full bg-white justify-center items-center py-2">
-          <Text className="text-light-tint">Simular</Text>
+        <View className="rounded-md w-full bg-light-tint justify-center items-center py-2">
+          <Text className="text-white">Simular</Text>
         </View>
       </TouchableOpacity>
     </View>

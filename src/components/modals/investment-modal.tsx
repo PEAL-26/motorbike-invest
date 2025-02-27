@@ -1,9 +1,15 @@
 import { colors } from "@/constants/colors";
 import { INVESTMENT_STATUS_ENUM } from "@/constants/investment";
-import { formatDateForDatabase, isValidDate } from "@/helpers/date";
+import {
+  formatDateForDatabase,
+  formatDateFromDateObject,
+  isValidDate,
+} from "@/helpers/date";
+import { getInvestmentById } from "@/services/investments/get-by-id";
 import { registerInvestment } from "@/services/investments/register";
-import { useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { Trash2Icon } from "lucide-react-native";
+import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
@@ -35,11 +41,15 @@ type InvestmentFormData = {
 type DateTypes = "startDate" | "endDate";
 export function InvestmentModal(props: Props) {
   const { investmentId, show, onClose } = props;
-  const isLoading = false;
 
-  const [formData, setFormData] = useState<Partial<InvestmentFormData> | null>(
-    null,
-  );
+  const { data, isLoading } = useQuery({
+    queryFn: () => (investmentId ? getInvestmentById(investmentId) : null),
+    queryKey: ["investment", investmentId],
+  });
+
+  const [formData, setFormData] = useState<Partial<InvestmentFormData> | null>({
+    status: INVESTMENT_STATUS_ENUM.PENDING,
+  });
   const [errorDate, setErrorDate] = useState<Partial<
     Record<DateTypes, boolean>
   > | null>(null);
@@ -82,6 +92,9 @@ export function InvestmentModal(props: Props) {
       queryClient.invalidateQueries({
         queryKey: ["investments", investmentId],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["incomes"],
+      });
       onClose?.();
     } catch (error: any) {
       console.log(error);
@@ -95,15 +108,110 @@ export function InvestmentModal(props: Props) {
     setFormData((prev) => ({ ...prev, ...data }));
   };
 
+  useEffect(() => {
+    if (investmentId && data) {
+      setFormData({
+        name: data.name,
+        amount: Number(data.amount),
+        income: Number(data.income),
+        profit: Number(data.profit),
+        bonus: data.bonus ? Number(data.bonus) : undefined,
+        duration: Number(data.duration),
+        startDate: formatDateFromDateObject(data.startDate),
+        endDate: formatDateFromDateObject(data.endDate),
+        status: data?.status || INVESTMENT_STATUS_ENUM.PENDING,
+      });
+    }
+  }, [data, investmentId]);
+
+  const statusColor = (status: INVESTMENT_STATUS_ENUM) => {
+    const color = {
+      PENDING: status === formData?.status ? "#a16207" : "#ca8a04",
+      ACTIVE: status === formData?.status ? "#15803d" : "#16a34a",
+      FINISHED: status === formData?.status ? "#b91c1c" : "#dc2626",
+    }[status];
+
+    return color;
+  };
+
   return (
     <DefaultModal title="Investimento" show={show} onClose={onClose}>
       {isLoading && (
-        <View className="flex-1 flex flex-row items-center justify-center">
+        <View className="p-5 flex-col justify-center items-center h-20">
           <ActivityIndicator size={20} animating color={colors.light.tint} />
         </View>
       )}
       {!isLoading && (
         <View className="p-5 flex-col gap-3">
+          <View className="flex-row justify-center gap-4 items-center">
+            <View
+              style={{
+                borderColor:
+                  formData?.status === "PENDING"
+                    ? statusColor(INVESTMENT_STATUS_ENUM.PENDING)
+                    : "transparent",
+              }}
+              className="rounded-md border-2 p-1"
+            >
+              <TouchableOpacity
+                style={{
+                  backgroundColor: statusColor(INVESTMENT_STATUS_ENUM.PENDING),
+                }}
+                className="rounded-md justify-center items-center w-20 h-20 "
+                activeOpacity={0.7}
+                onPress={() =>
+                  changeFormData({ status: INVESTMENT_STATUS_ENUM.PENDING })
+                }
+              >
+                <Text className="text-white text-xs">Pendente</Text>
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                borderColor:
+                  formData?.status === "ACTIVE"
+                    ? statusColor(INVESTMENT_STATUS_ENUM.ACTIVE)
+                    : "transparent",
+              }}
+              className="rounded-md border-2 p-1"
+            >
+              <TouchableOpacity
+                style={{
+                  backgroundColor: statusColor(INVESTMENT_STATUS_ENUM.ACTIVE),
+                }}
+                className="rounded-md justify-center items-center w-20 h-20 "
+                activeOpacity={0.7}
+                onPress={() =>
+                  changeFormData({ status: INVESTMENT_STATUS_ENUM.ACTIVE })
+                }
+              >
+                <Text className="text-white text-xs">Activo</Text>
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                borderColor:
+                  formData?.status === "FINISHED"
+                    ? statusColor(INVESTMENT_STATUS_ENUM.FINISHED)
+                    : "transparent",
+              }}
+              className="rounded-md border-2 p-1"
+            >
+              <TouchableOpacity
+                style={{
+                  backgroundColor: statusColor(INVESTMENT_STATUS_ENUM.FINISHED),
+                }}
+                className="rounded-md justify-center items-center w-20 h-20 "
+                activeOpacity={0.7}
+                onPress={() =>
+                  changeFormData({ status: INVESTMENT_STATUS_ENUM.FINISHED })
+                }
+              >
+                <Text className="text-white text-xs">Finalizado</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
           <View className="flex-row gap-3">
             <View className="flex-1">
               <Text className="font-bold">Nome</Text>
@@ -137,8 +245,8 @@ export function InvestmentModal(props: Props) {
             <View className="flex-1">
               <Text className="font-bold">Data de início</Text>
               <TextInput
-                keyboardType="numbers-and-punctuation"
-                // placeholder={new Date()?.toLocaleDateString()}
+                keyboardType="numeric"
+                placeholder={new Date().toLocaleDateString()}
                 className="border rounded px-2 text-xs border-gray-200"
                 maxLength={11}
                 value={
@@ -156,10 +264,10 @@ export function InvestmentModal(props: Props) {
             <View className="flex-1">
               <Text className="font-bold">Data de término</Text>
               <TextInput
-                keyboardType="numbers-and-punctuation"
-                // placeholder={new Date(
-                //   new Date()?.setMonth(new Date()?.getMonth() + 6),
-                // )?.toLocaleDateString()}
+                keyboardType="numeric"
+                placeholder={new Date(
+                  new Date().setMonth(new Date().getMonth() + 6),
+                ).toLocaleDateString()}
                 className="border rounded px-2 text-xs border-gray-200"
                 maxLength={11}
                 value={formData?.endDate ? String(formData.endDate).trim() : ""}
@@ -221,13 +329,28 @@ export function InvestmentModal(props: Props) {
             </View>
           </View>
 
-          <TouchableOpacity
-            className="p-2 w-full rounded bg-green-600 justify-center items-center"
-            activeOpacity={0.7}
-            onPress={handleSave}
-          >
-            <Text className="text-white">Guardar</Text>
-          </TouchableOpacity>
+          <View className="flex flex-row items-center gap-3">
+            <TouchableOpacity
+              className="p-2 rounded bg-green-600 justify-center items-center flex-1"
+              activeOpacity={0.7}
+              onPress={handleSave}
+            >
+              <Text className="text-white">Guardar</Text>
+            </TouchableOpacity>
+            {investmentId && data && (
+              <TouchableOpacity
+                className="p-2"
+                activeOpacity={0.7}
+                onPress={handleSave}
+              >
+                <Trash2Icon
+                  size={16}
+                  color="#ef4444"
+                  className="size-4 text-red-500"
+                />
+              </TouchableOpacity>
+            )}
+          </View>
         </View>
       )}
     </DefaultModal>

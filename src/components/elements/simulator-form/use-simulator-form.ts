@@ -1,3 +1,4 @@
+import { formatDateForDatabase } from "@/helpers/date";
 import { useState } from "react";
 import { SimulatorFormData, SimulatorFormProps } from "./types";
 
@@ -7,7 +8,7 @@ export function useSimulatorForm(props: SimulatorFormProps) {
 
   const handleSimulate = () => {
     const {
-      date = new Date(),
+      date = "",
       investment = 0,
       income = 0,
       intervalPeriodBeforeInvestment = 0,
@@ -24,7 +25,7 @@ export function useSimulatorForm(props: SimulatorFormProps) {
       intervalPeriodBeforeInvestment,
       duration,
       goal,
-      date,
+      date: formatDateForDatabase(date) || new Date().toISOString(),
       balanceInitial,
       profit,
       bonus,

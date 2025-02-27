@@ -36,7 +36,7 @@ export function DefaultModal(props: Props) {
               <XIcon size={16} color={"#000"} />
             </TouchableOpacity>
           </View>
-          <View>{children}</View>
+          <View className="262666h-[70%]">{children}</View>
         </View>
       </Pressable>
     </Modal>

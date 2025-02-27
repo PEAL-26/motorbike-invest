@@ -7,7 +7,7 @@
 // const profit = 133_200;
 
 export type InputData = {
-  date: Date;
+  date: string;
   balanceInitial: number;
   investment: number;
   income: number;
@@ -33,7 +33,7 @@ export function simulate(input: InputData) {
     income,
     balanceInitial,
   } = input;
-  let date = new Date("2024-12-27");
+  let date = new Date(input.date);
   let balance = balanceInitial - investment;
   const repeat = investments.length * profit + bonus + investment < goal;
   const items = [];

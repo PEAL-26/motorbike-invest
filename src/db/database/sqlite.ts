@@ -14,8 +14,8 @@ import {
   generateQueryFields,
   generateQuerySql,
   generateWhereClause,
-  join,
   serialize,
+  setValueData,
 } from "./utils";
 
 export class DatabaseSQLite implements IDatabase {
@@ -39,7 +39,7 @@ export class DatabaseSQLite implements IDatabase {
       `INSERT INTO ${tableName} (${fields.join(", ")}) VALUES (${fields
         .map(() => "?")
         .join(", ")});`,
-      values
+      values,
     );
 
     data.id = result.lastInsertRowId;
@@ -49,33 +49,33 @@ export class DatabaseSQLite implements IDatabase {
 
   async insertBulk(
     tableName: string,
-    data: Record<string, any>[]
+    data: Record<string, any>[],
   ): Promise<void> {
     await Promise.all(
       data.map((item) => {
         this.insert(tableName, item);
-      })
+      }),
     );
   }
 
   async update<T>(
     tableName: string,
     data: Record<string, any>,
-    id: number
+    id: number,
   ): Promise<T> {
     let sets: string[] = [];
     let values: string[] = [];
     for (const [property, value] of Object.entries(data)) {
       if (property === "id") continue;
       sets.push(`${property}=?`);
-      values.push(value);
+      values.push(setValueData(value));
     }
 
     if (!sets.length) throw new Error("Deve informar os dados a serem salvos.");
 
     await this.connection.runAsync(
       `UPDATE ${tableName} SET ${sets.join(", ")} WHERE id=?`,
-      [...values, id]
+      [...values, id],
     );
 
     data.id = id;
@@ -87,7 +87,7 @@ export class DatabaseSQLite implements IDatabase {
     await Promise.all(
       data.map((item) => {
         this.update(tableName, item, item.id);
-      })
+      }),
     );
 
     return data as T[];
@@ -100,7 +100,7 @@ export class DatabaseSQLite implements IDatabase {
 
   async getFirst<T>(
     tableName: string,
-    configs?: DatabaseConfig
+    configs?: DatabaseConfig,
   ): Promise<T | null> {
     const { select, where, include } = configs || {};
     const fields = generateQueryFields(select);
@@ -128,7 +128,7 @@ export class DatabaseSQLite implements IDatabase {
     const { baseQuery, includes } = generateQuerySql(tableName, configs);
     const result = await this.connection.getAllAsync<T>(baseQuery);
     const data = result.map(
-      (item) => serialize(item, [tableName, ...includes.tables]) as T
+      (item) => serialize(item, [tableName, ...includes.tables]) as T,
     );
 
     return data;
@@ -136,7 +136,7 @@ export class DatabaseSQLite implements IDatabase {
 
   async listPaginate<T>(
     tableName: string,
-    configs?: ListPaginateConfigs
+    configs?: ListPaginateConfigs,
   ): Promise<PaginatedResult<T>> {
     const { size = 10, page = 1 } = configs || {};
 
@@ -154,7 +154,7 @@ export class DatabaseSQLite implements IDatabase {
     const paginatedQuery = `${baseQuery} LIMIT ${size} OFFSET ${offset}`;
     const result = await this.connection.getAllAsync<T>(paginatedQuery);
     const data = result.map(
-      (item) => serialize(item, [tableName, ...includes.tables]) as T
+      (item) => serialize(item, [tableName, ...includes.tables]) as T,
     );
 
     // Calcular informações de paginação
@@ -174,7 +174,7 @@ export class DatabaseSQLite implements IDatabase {
 
   listAllEach<T>(
     tableName: string,
-    configs?: DatabaseConfig
+    configs?: DatabaseConfig,
   ): AsyncIterableIterator<T> {
     throw new Error("Method not implemented.");
     // const { select, where } = configs || {};

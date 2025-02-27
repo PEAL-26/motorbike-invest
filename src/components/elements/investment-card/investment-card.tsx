@@ -44,11 +44,11 @@ export function InvestmentCard(props: InvestmentCardProps) {
         <View className="flex flex-row items-start justify-between">
           <Text
             className={cn("text-xs text-gray-500")}
-          >{`Duração: ${data.duration}`}</Text>
+          >{`Duração: ${data.duration} ${Number(data.duration) > 1 ? "meses" : "mês"}`}</Text>
           <Text className={cn("text-xs text-gray-500")}>
             {clearDate(data.startDate)?.toLocaleDateString()}
             {` - `}
-            {clearDate(data.startDate)?.toLocaleDateString()}
+            {clearDate(data.endDate)?.toLocaleDateString()}
           </Text>
         </View>
       </View>
