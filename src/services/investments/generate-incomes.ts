@@ -24,17 +24,17 @@ export function generateIncomes(input: IncomeInput) {
   const WAIT_UNTIL_FIRST_PAYMENT = 2; // tempo em meses
   const oldDate = new Date(date);
 
-  for (
-    let i = 1 + WAIT_UNTIL_FIRST_PAYMENT;
-    i <= duration + WAIT_UNTIL_FIRST_PAYMENT;
-    i++
-  ) {
-    const isLast = i === duration + WAIT_UNTIL_FIRST_PAYMENT;
-    const newDate = new Date(oldDate.setMonth(oldDate.getMonth() - 1 + i));
+  for (let i = 1; i <= duration; i++) {
+    const isLast = i === duration;
+    const newDate = new Date(
+      i === 1
+        ? oldDate.setMonth(oldDate.getMonth() + WAIT_UNTIL_FIRST_PAYMENT)
+        : oldDate.setMonth(oldDate.getMonth() + 1),
+    );
     incomes.push({
       investment_id: investmentId,
       code: newDate.getTime().toString(),
-      number: i - WAIT_UNTIL_FIRST_PAYMENT,
+      number: i,
       income: isLast ? income + (bonus || 0) : income,
       status: INCOME_STATUS_ENUM.PENDING,
       income_date: newDate,
