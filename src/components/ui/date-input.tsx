@@ -33,8 +33,8 @@ export function DateInput() {
         keyboardType="numeric"
         maxLength={10}
         placeholder="dd/mm/yyyy"
-        className="text-white border border-white rounded px-2 py-1"
-        placeholderClassName="text-white/50"
+        className="border border-gray-200 rounded px-2 py-1"
+        placeholderClassName="text-gray-200"
       />
     </View>
   );

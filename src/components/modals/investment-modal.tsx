@@ -217,7 +217,7 @@ export function InvestmentModal(props: Props) {
               <Text className="font-bold">Nome</Text>
               <TextInput
                 placeholder="Nome"
-                className="border rounded px-2 text-xs border-gray-200"
+                className="border rounded px-2 text-xs border-gray-200 py-1"
                 value={formData?.name || ""}
                 onChangeText={(name) => changeFormData({ name })}
               />
@@ -229,7 +229,7 @@ export function InvestmentModal(props: Props) {
                   <TextInput
                     placeholder="6"
                     keyboardType="number-pad"
-                    className="w-20 text-center px-2 text-xs border-gray-200"
+                    className="w-20 text-center px-2 text-xs border-gray-200 py-1"
                     value={formData?.duration ? String(formData.duration) : ""}
                     onChangeText={(duration) => changeFormData({ duration })}
                   />
@@ -247,7 +247,7 @@ export function InvestmentModal(props: Props) {
               <TextInput
                 keyboardType="numeric"
                 placeholder={new Date().toLocaleDateString()}
-                className="border rounded px-2 text-xs border-gray-200"
+                className="border rounded px-2 text-xs border-gray-200 py-1"
                 maxLength={11}
                 value={
                   formData?.startDate ? String(formData.startDate).trim() : ""
@@ -268,7 +268,7 @@ export function InvestmentModal(props: Props) {
                 placeholder={new Date(
                   new Date().setMonth(new Date().getMonth() + 6),
                 ).toLocaleDateString()}
-                className="border rounded px-2 text-xs border-gray-200"
+                className="border rounded px-2 text-xs border-gray-200 py-1"
                 maxLength={11}
                 value={formData?.endDate ? String(formData.endDate).trim() : ""}
                 onChangeText={(endDate) => changeFormData({ endDate })}
@@ -287,7 +287,7 @@ export function InvestmentModal(props: Props) {
               <TextInput
                 keyboardType="number-pad"
                 placeholder="0,00 Kz"
-                className="border rounded px-2 text-xs border-gray-200"
+                className="border rounded px-2 text-xs border-gray-200 py-1"
                 value={formData?.amount ? String(formData.amount) : ""}
                 onChangeText={(amount) => changeFormData({ amount })}
               />
@@ -298,7 +298,7 @@ export function InvestmentModal(props: Props) {
               <TextInput
                 keyboardType="number-pad"
                 placeholder="0,00 Kz"
-                className="border rounded px-2 text-xs border-gray-200"
+                className="border rounded px-2 text-xs border-gray-200 py-1"
                 value={formData?.income ? String(formData.income) : ""}
                 onChangeText={(income) => changeFormData({ income })}
               />
@@ -311,7 +311,7 @@ export function InvestmentModal(props: Props) {
               <TextInput
                 keyboardType="number-pad"
                 placeholder="0,00 Kz"
-                className="border rounded px-2 text-xs border-gray-200"
+                className="border rounded px-2 text-xs border-gray-200 py-1"
                 value={formData?.profit ? String(formData.profit) : ""}
                 onChangeText={(profit) => changeFormData({ profit })}
               />
@@ -322,7 +322,7 @@ export function InvestmentModal(props: Props) {
               <TextInput
                 keyboardType="number-pad"
                 placeholder="0,00 Kz"
-                className="border rounded px-2 text-xs border-gray-200"
+                className="border rounded px-2 text-xs border-gray-200 py-1"
                 value={formData?.bonus ? String(formData.bonus) : ""}
                 onChangeText={(bonus) => changeFormData({ bonus })}
               />

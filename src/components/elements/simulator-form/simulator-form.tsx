@@ -18,7 +18,7 @@ export function SimulatorForm(props: SimulatorFormProps) {
           <TextInput
             keyboardType="numbers-and-punctuation"
             placeholder={new Date().toLocaleDateString()}
-            className="border rounded px-2 text-xs border-gray-200"
+            className="border rounded px-2 text-xs border-gray-200 py-1"
             maxLength={11}
             value={formData?.date}
             onChangeText={(date) => handleFormData({ date })}
@@ -37,7 +37,7 @@ export function SimulatorForm(props: SimulatorFormProps) {
         {/* Investimento */}
         <Text className="font-bold">Valor Inicial</Text>
         <TextInput
-          className="border rounded px-2 text-xs border-gray-200"
+          className="border rounded px-2 text-xs border-gray-200 py-1"
           placeholderClassName="text-white/50"
           placeholder="Valor disponível"
           value={formData?.balanceInitial?.toString()}
@@ -49,7 +49,7 @@ export function SimulatorForm(props: SimulatorFormProps) {
         {/* Investimento */}
         <Text className="font-bold">Valor do Investimento</Text>
         <TextInput
-          className="border rounded px-2 text-xs border-gray-200"
+          className="border rounded px-2 text-xs border-gray-200 py-1"
           placeholderClassName="text-white/50"
           placeholder="Investimento"
           value={formData?.investment?.toString()}
@@ -61,7 +61,7 @@ export function SimulatorForm(props: SimulatorFormProps) {
         {/* Rendimento Mensal */}
         <Text className="font-bold">Rendimento mensal</Text>
         <TextInput
-          className="border rounded px-2 text-xs border-gray-200"
+          className="border rounded px-2 text-xs border-gray-200 py-1"
           placeholderClassName="text-white/50"
           placeholder="Rendimento mensal"
           value={formData?.income?.toString()}
@@ -73,7 +73,7 @@ export function SimulatorForm(props: SimulatorFormProps) {
         {/* Intervalo de tempo (mês) para iniciar a receber os rendimentos */}
         <Text className="font-bold">Intervalo até o primeiro rendimento</Text>
         <TextInput
-          className="border rounded px-2 text-xs border-gray-200"
+          className="border rounded px-2 text-xs border-gray-200 py-1"
           placeholderClassName="text-white/50"
           placeholder="Início do rendimento"
           value={formData?.intervalPeriodBeforeInvestment?.toString()}
@@ -87,7 +87,7 @@ export function SimulatorForm(props: SimulatorFormProps) {
         {/* Duração (em meses) */}
         <Text className="font-bold">Duração</Text>
         <TextInput
-          className="border rounded px-2 text-xs border-gray-200"
+          className="border rounded px-2 text-xs border-gray-200 py-1"
           placeholderClassName="text-white/50"
           placeholder="Duração (em meses)"
           value={formData?.duration?.toString()}
@@ -99,7 +99,7 @@ export function SimulatorForm(props: SimulatorFormProps) {
         {/* Objectivo */}
         <Text className="font-bold">Objectivo</Text>
         <TextInput
-          className="border rounded px-2 text-xs border-gray-200"
+          className="border rounded px-2 text-xs border-gray-200 py-1"
           placeholderClassName="text-white/50"
           placeholder="Objectivo"
           value={formData?.goal?.toString()}

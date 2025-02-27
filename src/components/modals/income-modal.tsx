@@ -183,7 +183,7 @@ export function IncomeModal(props: Props) {
                 <TextInput
                   keyboardType="numeric"
                   placeholder={new Date().toLocaleDateString()}
-                  className="border rounded px-2 text-xs border-gray-200"
+                  className="border rounded px-2 text-xs border-gray-200 py-1"
                   maxLength={11}
                   value={inputDateFormat(
                     formData?.paymentDate
